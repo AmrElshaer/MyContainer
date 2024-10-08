@@ -1,0 +1,20 @@
+﻿
+@using MyContainer.Resources.Pages.Users
+@model MyContainer.Data.User
+
+
+@inject IStringLocalizer<UserPage> Localizer
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Name">@Localizer["Name"]</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Phone">@Localizer["Phone"]</label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
