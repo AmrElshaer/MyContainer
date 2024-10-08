@@ -11,7 +11,7 @@ public class Index(ApplicationDbContext context) : PageModel
 
     public async Task<IActionResult> OnGetAsync()
     {
-        Users = await context.Users.ToListAsync();
+        Users = await context.Users.AsNoTracking().ToListAsync();
         return Page();
     }
     public async Task<IActionResult> OnPostDeleteAsync(int id)

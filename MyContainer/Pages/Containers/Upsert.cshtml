@@ -1,0 +1,139 @@
+﻿@page
+@model MyContainer.Pages.Containers.Upsert
+
+
+<form method="post">
+    <div class="form-group">
+        <input asp-for="Container.Id" class="form-control" hidden="hidden" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Container.Number"></label>
+        <input asp-for="Container.Number" class="form-control" />
+        <span asp-validation-for="Container.Number" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Container.ContainerType"></label>
+        <input asp-for="Container.ContainerType" class="form-control"/>
+        <span asp-validation-for="Container.ContainerType" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Container.ContainerPrice"></label>
+        <input asp-for="Container.ContainerPrice" class="form-control"/>
+        <span asp-validation-for="Container.ContainerPrice" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Container.LoadingPrice"></label>
+        <input asp-for="Container.LoadingPrice" class="form-control"/>
+        <span asp-validation-for="Container.LoadingPrice" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Container.LoadingTime"></label>
+        <input asp-for="Container.LoadingTime" class="form-control"/>
+        <span asp-validation-for="Container.LoadingTime" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Container.NumberOfWoodenBoards"></label>
+        <input asp-for="Container.NumberOfWoodenBoards" class="form-control"/>
+        <span asp-validation-for="Container.NumberOfWoodenBoards" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Container.PriceOfWoodenBoard"></label>
+        <input asp-for="Container.PriceOfWoodenBoard" class="form-control"/>
+        <span asp-validation-for="Container.PriceOfWoodenBoard" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Container.NumberOfBoxes"></label>
+        <input asp-for="Container.NumberOfBoxes" class="form-control"/>
+        <span asp-validation-for="Container.NumberOfBoxes" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Container.BoxPrice"></label>
+        <input asp-for="Container.BoxPrice" class="form-control"/>
+        <span asp-validation-for="Container.BoxPrice" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Container.NumberOfStretch"></label>
+        <input asp-for="Container.NumberOfStretch" class="form-control"/>
+        <span asp-validation-for="Container.NumberOfStretch" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Container.PriceOfStretch"></label>
+        <input asp-for="Container.PriceOfStretch" class="form-control"/>
+        <span asp-validation-for="Container.PriceOfStretch" class="text-danger"></span>
+    </div>
+    <!-- Other fields here -->
+
+    <div class="form-group">
+        <label asp-for="Container.UserId">Customer</label>
+        <select asp-for="Container.UserId" class="form-control" asp-items="Model.Customers"></select>
+        <span asp-validation-for="Container.UserId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Container.TotalPrice"></label>
+        <input asp-for="Container.TotalPrice" class="form-control" readonly/>
+        <span asp-validation-for="Container.TotalPrice" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Container.Arrive"></label>
+        <input asp-for="Container.Arrive" class="form-control"/>
+        <span asp-validation-for="Container.Arrive" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Container.Remaining"></label>
+        <input asp-for="Container.Remaining" class="form-control" readonly/> <!-- Set as readonly -->
+        <span asp-validation-for="Container.Remaining" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+@section Scripts{
+    <script>
+    $(document).ready(function () {
+        
+        $('[name="Container.NumberOfBoxes"], [name="Container.BoxPrice"],[name="Container.ContainerPrice"], [name="Container.NumberOfWoodenBoards"], [name="Container.PriceOfWoodenBoard"], ' +
+            '[name="Container.NumberOfBoxes"], [name="Container.BoxPrice"], [name="Container.NumberOfStretch"], ' +
+            '[name="Container.PriceOfStretch"], [name="Container.LoadingPrice"], [name="Container.Arrive"]').on('input', function () {
+            calculateTotalPrice();
+        });
+
+        // Function to calculate TotalPrice
+        function calculateTotalPrice() {
+            console.log("calcalte **  ");
+            const containerPrice = parseFloat($('[name="Container.ContainerPrice"]').val()) || 0;
+            const numberOfWoodenBoards = parseInt($('[name="Container.NumberOfWoodenBoards"]').val()) || 0;
+            const priceOfWoodenBoard = parseFloat($('[name="Container.PriceOfWoodenBoard"]').val()) || 0;
+            const numberOfBoxes = parseInt($('[name="Container.NumberOfBoxes"]').val()) || 0;
+            const boxPrice = parseFloat($('[name="Container.BoxPrice"]').val()) || 0;
+            const numberOfStretch = parseInt($('[name="Container.NumberOfStretch"]').val()) || 0;
+            const priceOfStretch = parseFloat($('[name="Container.PriceOfStretch"]').val()) || 0;
+            const loadingPrice = parseFloat($('[name="Container.LoadingPrice"]').val()) || 0;
+
+            // Calculate TotalPrice
+            const totalPrice = containerPrice
+                + (numberOfWoodenBoards * priceOfWoodenBoard)
+                + (numberOfBoxes * boxPrice)
+                + (numberOfStretch * priceOfStretch)
+                + loadingPrice;
+
+            // Set the calculated TotalPrice in the respective input field
+            $('[name="Container.TotalPrice"]').val(totalPrice.toFixed(2));
+
+            // Call calculateRemaining to update Remaining after TotalPrice changes
+            calculateRemaining();
+        }
+
+        // Function to calculate Remaining
+        function calculateRemaining() {
+        console.log("calcalte **  ");
+            const totalPrice = parseFloat($('[name="Container.TotalPrice"]').val()) || 0;
+            const arrive = parseFloat($('[name="Container.Arrive"]').val()) || 0;
+            const remaining = totalPrice - arrive;
+
+            $('[name="Container.Remaining"]').val(remaining.toFixed(2));
+        }
+    });
+</script>
+}
