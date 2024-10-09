@@ -1,0 +1,28 @@
+﻿@page
+@using MyContainer.Enums
+@model MyContainer.Pages.Transactions.Index
+<table class="table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Created At</th>
+        <th>Amount</th>
+        <th>Transaction Type</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var transaction in Model.Transactions)
+    {
+        <tr>
+            <td>@transaction.Id</td>
+            <td>@transaction.User.Name</td>
+            <td>@transaction.CreatedAt.ToString("g")</td>
+            <td style="color: @(transaction.TransactionType == TransactionType.Credit ? "green" : "red")">@transaction.Amount.ToString("G29")</td>
+            <td style="color: @(transaction.TransactionType == TransactionType.Credit ? "green" : "red")">
+                @transaction.TransactionType
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

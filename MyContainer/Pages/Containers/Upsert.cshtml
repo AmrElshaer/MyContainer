@@ -3,12 +3,13 @@
 
 
 <form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
-        <input asp-for="Container.Id" class="form-control" hidden="hidden" />
+        <input asp-for="Container.Id" class="form-control" hidden="hidden"/>
     </div>
     <div class="form-group">
         <label asp-for="Container.Number"></label>
-        <input asp-for="Container.Number" class="form-control" />
+        <input asp-for="Container.Number" class="form-control"/>
         <span asp-validation-for="Container.Number" class="text-danger"></span>
     </div>
     <div class="form-group">

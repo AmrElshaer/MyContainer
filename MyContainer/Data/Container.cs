@@ -7,7 +7,7 @@ public class Container
     public decimal ContainerPrice { get; set; }
     public string Number { get; set; } = default!;
     public decimal LoadingPrice { get; set; }
-    public DateTime LoadingTime { get; set; }
+    public DateTime LoadingTime { get; set; }=DateTime.Now;
     public int NumberOfWoodenBoards { get; set; }
     public decimal PriceOfWoodenBoard { get; set; }
     public int NumberOfBoxes { get; set; }
@@ -19,6 +19,6 @@ public class Container
     public decimal Arrive { get; set; }
     public DateTime CreatedAt { get; set; }
     public int UserId { get; set; }
-    public User User { get; set; } = default!;
+    public User User { get; set; } 
 
 }

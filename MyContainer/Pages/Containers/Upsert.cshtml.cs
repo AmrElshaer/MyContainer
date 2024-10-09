@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyContainer.Data;
+using MyContainer.Enums;
 
 namespace MyContainer.Pages.Containers;
 
@@ -36,6 +37,12 @@ public class Upsert(ApplicationDbContext context) : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
+        if (Container.Remaining < 0)
+        {
+            return Page();
+            
+        }
+       
         if (Container.Id == 0)
         {
             context.Containers.Add(Container);
@@ -44,6 +51,20 @@ public class Upsert(ApplicationDbContext context) : PageModel
         {
             context.Attach(Container).State = EntityState.Modified;
         }
+
+        if (Container.Remaining>0)
+        {
+            var creditTransaction=new Transaction
+            {
+                UserId=Container.UserId,
+                CreatedAt = DateTime.Now,
+                TransactionType = TransactionType.Credit,
+                Amount = Container.Remaining,
+            };
+            await context.Transactions.AddAsync(creditTransaction);
+        }
+       
+        
 
         await context.SaveChangesAsync();
         return RedirectToPage("Index");
