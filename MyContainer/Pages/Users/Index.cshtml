@@ -21,12 +21,13 @@
     @foreach (var user in Model.Users)
     {
         <tr>
-            <td>@user.Id</td>
+            <td> <a asp-page="/Transactions/Create" asp-route-customerId="@user.Id">
+                    @user.Id
+            </a></td>
             <td>@user.Name</td>
             <td>@user.Phone</td>
             <td>
                 <a asp-page="Edit" asp-route-id="@user.Id" class="btn btn-warning">@Localizer["Edit"]</a>
-                <a asp-page="Delete" asp-route-id="@user.Id" class="btn btn-danger">@Localizer["Delete"]</a>
             </td>
         </tr>
     }

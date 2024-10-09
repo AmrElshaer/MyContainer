@@ -9,24 +9,28 @@
 <table class="table">
     <thead>
     <tr>
-        <th>ID</th>
-        <th>@Localizer["Type"]</th>
-        <th>@Localizer["Price"]</th>
+        <th>Number</th>
+        <th>@Localizer["ContainerType"]</th>
+        <th>@Localizer["TotalPrice"]</th>
         <th>@Localizer["Customer"]</th>
+        <th>@Localizer["CreatedAt"]</th>
+        <th>@Localizer["LoadingDate"]</th>
         <th>@Localizer["Actions"]</th>
+        
     </tr>
     </thead>
     <tbody>
     @foreach (var container in Model.Containers)
     {
         <tr>
-            <td>@container.Id</td>
+            <td>@container.Number</td>
             <td>@container.ContainerType</td>
-            <td>@container.TotalPrice</td>
+            <td>@container.TotalPrice.ToString("G29")</td>
             <td>@container.User.Name</td>
+            <td>@container.CreatedAt</td>
+            <td>@container.LoadingTime.ToString("g")</td>
             <td>
                 <a asp-page="Upsert" asp-route-id="@container.Id" class="btn btn-warning">@Localizer["Edit"]</a>
-                <a asp-page="Delete" asp-route-id="@container.Id" class="btn btn-danger">@Localizer["Delete"]</a>
             </td>
         </tr>
     }

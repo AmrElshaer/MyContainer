@@ -35,12 +35,13 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                     </li>
-                    <form asp-controller="Home" asp-action="SetLanguage" method="post">
-                        <select name="culture" onchange="this.form.submit();">
-                            <option value="en" selected="@(CultureInfo.CurrentCulture.Name == "en" ? "selected" : null)">English</option>
-                            <option value="ar" selected="@(CultureInfo.CurrentCulture.Name == "ar" ? "selected" : null)">Arabic</option>
-                        </select>
-                    </form>
+                    
+                    @* <form asp-controller="Home" asp-action="SetLanguage" method="post"> *@
+                    @*     <select name="culture" onchange="this.form.submit();"> *@
+                    @*         <option value="en" selected="@(CultureInfo.CurrentCulture.Name == "en" ? "selected" : null)">English</option> *@
+                    @*         <option value="ar" selected="@(CultureInfo.CurrentCulture.Name == "ar" ? "selected" : null)">Arabic</option> *@
+                    @*     </select> *@
+                    @* </form> *@
                 </ul>
             </div>
         </div>

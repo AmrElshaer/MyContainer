@@ -17,8 +17,9 @@ public class Container
     public decimal TotalPrice { get; set; }
     public decimal Remaining { get; set; }
     public decimal Arrive { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }=DateTime.Now;
     public int UserId { get; set; }
-    public User User { get; set; } 
+    public User User { get; set; }
+    public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
 }

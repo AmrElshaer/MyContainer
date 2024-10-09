@@ -13,6 +13,7 @@ public class Index(ApplicationDbContext context) : PageModel
         Transactions = await context.Transactions
             .AsNoTracking()
             .Include(t => t.User)
+            .OrderByDescending(t=>t.CreatedAt)
              .ToListAsync();
     }
 }

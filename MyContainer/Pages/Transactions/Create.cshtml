@@ -1,0 +1,42 @@
+﻿@page
+@model MyContainer.Pages.Transactions.Create
+
+<form method="post">
+    <div class="form-group">
+        <label>Remaining Balance:</label>
+        <input type="text" id="remainingBalance" value="@Model.RemainingBalance" class="form-control" readonly />
+    </div>
+
+    <div class="form-group">
+        <label for="CreditAmount">Credit Amount:</label>
+        <input type="number" id="creditAmount" asp-for="CreditAmount" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="DebitAmount">Debit Amount:</label>
+        <input type="number" id="debitAmount" asp-for="DebitAmount" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Remaining After Transaction:</label>
+        <input type="text" id="remainingAfter" class="form-control" readonly />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+@section Scripts {
+<script>
+    $(document).ready(function() {
+        function calculateRemaining() {
+            var initialRemaining = parseFloat($('#remainingBalance').val()) || 0;
+            var credit = parseFloat($('#creditAmount').val()) || 0;
+            var debit = parseFloat($('#debitAmount').val()) || 0;
+            var remainingAfter = initialRemaining + credit - debit;
+            $('#remainingAfter').val(remainingAfter.toFixed(2));
+        }
+
+        $('#creditAmount, #debitAmount').on('input', calculateRemaining);
+    });
+</script>
+}
