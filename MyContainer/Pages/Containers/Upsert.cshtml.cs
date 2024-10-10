@@ -59,57 +59,37 @@ public class Upsert(ApplicationDbContext context) : PageModel
 
     private async Task CreateContainerAsync()
     {
-        if (Container.Remaining > 0)
-        {
-            var transaction = CreateTransaction(Container.UserId, Container.Remaining, TransactionType.Credit);
-            Container.Transactions.Add(transaction);
-        }
-
-        if (Container.Arrive > 0)
-        {
-            var transaction = CreateTransaction(Container.UserId, Container.Arrive, TransactionType.Debit);
-            Container.Transactions.Add(transaction);
-        }
+     
+            var transaction = CreateTransaction(Container.UserId, Container.TotalPrice, Container.Arrive);
+            Container.Transaction=transaction;
+       
         await context.Containers.AddAsync(Container);
     }
 
     private async Task UpdateContainerAsync()
     {
-        var oldContainer = await context.Containers.Include(c => c.Transactions)
+        var oldContainer = await context.Containers.Include(c => c.Transaction)
             .FirstOrDefaultAsync(c => c.Id == Container.Id);
 
         ArgumentNullException.ThrowIfNull(oldContainer);
-
-        // Update UserId for transactions if UserId has changed
-        if (oldContainer.UserId != Container.UserId)
+        if (oldContainer.Transaction!= null)
         {
-            UpdateTransactionUserId(oldContainer.Transactions, Container.UserId);
+            oldContainer.Transaction.UserId=Container.UserId;
+            oldContainer.Transaction.CreditAmount=Container.TotalPrice;
+            oldContainer.Transaction.DebitAmount=Container.Arrive;
         }
-
-        // Update container properties
         UpdateContainerProperties(oldContainer);
-
-        // Create a new transaction if Remaining amount is positive
-        if (Container.Remaining > 0)
-        {
-            var transaction = CreateTransaction(Container.UserId, Container.Remaining, TransactionType.Credit);
-            oldContainer.Transactions.Add(transaction);
-        }
-        if (Container.Arrive > 0)
-        {
-            var transaction = CreateTransaction(Container.UserId, Container.Arrive, TransactionType.Debit);
-            oldContainer.Transactions.Add(transaction);
-        }
     }
 
-    private Transaction CreateTransaction(int userId, decimal amount, TransactionType transactionType)
+    private Transaction CreateTransaction(int userId, decimal creditAmount, decimal debitAmount)
     {
         return new Transaction
         {
             UserId = userId,
             CreatedAt = DateTime.Now,
-            TransactionType = transactionType,
-            Amount = amount
+            TransactionType = TransactionType.Container,
+            CreditAmount = creditAmount,
+            DebitAmount = debitAmount,
         };
     }
 

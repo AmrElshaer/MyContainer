@@ -10,7 +10,8 @@ public class Transaction
     public int UserId { get; set; }
     public User User { get; set; } = default!;
     public DateTime CreatedAt { get; set; }
-    public decimal Amount { get; set; }
+    public decimal DebitAmount { get; set; }
+    public decimal CreditAmount { get; set; }
     public TransactionType TransactionType { get; set; }
 
 }

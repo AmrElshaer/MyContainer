@@ -37,7 +37,7 @@ public class Create : PageModel
         // Calculate remaining balance based on transactions
         RemainingBalance = _context.Transactions
             .Where(t => t.UserId == customerId)
-            .Sum(t => t.TransactionType == TransactionType.Credit ? t.Amount : -t.Amount);
+            .Sum(t =>  t.CreditAmount-t.DebitAmount);
 
         return Page();
     }
@@ -49,28 +49,17 @@ public class Create : PageModel
             return Page();
         }
 
-        if (CreditAmount > 0)
+        if (CreditAmount > 0 || DebitAmount > 0)
         {
             var creditTransaction = new Transaction
             {
                 UserId = CustomerId,
-                Amount = CreditAmount,
-                TransactionType = TransactionType.Credit,
+                CreditAmount = CreditAmount,
+                DebitAmount = DebitAmount,
+                TransactionType = TransactionType.Manual,
                 CreatedAt = DateTime.Now
             };
             _context.Transactions.Add(creditTransaction);
-        }
-
-        if (DebitAmount>0)
-        {
-            var debitTransaction = new Transaction
-            {
-                UserId = CustomerId,
-                Amount = DebitAmount,
-                TransactionType = TransactionType.Debit,
-                CreatedAt = DateTime.Now
-            };
-            _context.Transactions.Add(debitTransaction);
         }
         await _context.SaveChangesAsync();
         return RedirectToPage("Index");

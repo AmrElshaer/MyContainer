@@ -95,14 +95,17 @@ namespace MyContainer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int?>("ContainerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal>("CreditAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("DebitAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("TransactionType")
                         .HasColumnType("int");
@@ -112,7 +115,9 @@ namespace MyContainer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContainerId");
+                    b.HasIndex("ContainerId")
+                        .IsUnique()
+                        .HasFilter("[ContainerId] IS NOT NULL");
 
                     b.HasIndex("UserId");
 
@@ -154,8 +159,8 @@ namespace MyContainer.Migrations
             modelBuilder.Entity("MyContainer.Data.Transaction", b =>
                 {
                     b.HasOne("MyContainer.Data.Container", "Container")
-                        .WithMany("Transactions")
-                        .HasForeignKey("ContainerId");
+                        .WithOne("Transaction")
+                        .HasForeignKey("MyContainer.Data.Transaction", "ContainerId");
 
                     b.HasOne("MyContainer.Data.User", "User")
                         .WithMany("Transactions")
@@ -170,7 +175,8 @@ namespace MyContainer.Migrations
 
             modelBuilder.Entity("MyContainer.Data.Container", b =>
                 {
-                    b.Navigation("Transactions");
+                    b.Navigation("Transaction")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MyContainer.Data.User", b =>

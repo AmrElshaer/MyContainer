@@ -6,7 +6,8 @@
     <tr>
         <th>Username</th>
         <th>Created At</th>
-        <th>Amount</th>
+        <th>CreditAmount</th>
+        <th>DebitAmount</th>
         <th>Transaction Type</th>
     </tr>
     </thead>
@@ -16,8 +17,9 @@
         <tr>
             <td>@transaction.User.Name</td>
             <td>@transaction.CreatedAt.ToString("g")</td>
-            <td style="color: @(transaction.TransactionType == TransactionType.Credit ? "green" : "red")">@transaction.Amount.ToString("G29")</td>
-            <td style="color: @(transaction.TransactionType == TransactionType.Credit ? "green" : "red")">
+            <td style="color:green">@transaction.CreditAmount.ToString("G29")</td>
+            <td style="color:red">@transaction.DebitAmount.ToString("G29")</td>
+            <td>
                 @transaction.TransactionType
             </td>
         </tr>
