@@ -1,0 +1,32 @@
+﻿services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=1Secure*Password1
+    ports:
+      - "5433:1433"
+    networks:
+      - proxybackend
+    volumes:
+      - sqlserverdata:/var/opt/mssql
+  mycontainer:
+    image: mycontainer
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 8000:8080
+      - 8001:443
+    build:
+      context: .
+      dockerfile: MyContainer/Dockerfile
+    restart: on-failure
+    depends_on:
+      - db
+    networks:
+      - proxybackend
+  
+networks:
+  proxybackend:
+    name: proxybackend
+    driver: bridge
